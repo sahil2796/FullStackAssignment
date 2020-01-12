@@ -1,0 +1,67 @@
+<html>
+        <head>
+            <title>Fetching details from random API</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        </head>
+        <body>
+            <div class="container">
+                <div class="table-responsive">
+                    <h1>Details of the user<h1>
+                        <br>
+                        <table class="table table-bordered table striped" id="user_table">
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Image</th>
+                            </tr>
+                        </table>
+                </div>
+                <div id="result">
+                  </div>
+            </div>
+        </body>
+    </html>
+     <script>
+$(document).ready(function(){
+    var url = "https://randomuser.me/api/";
+    var data ="";
+    var btnadd;
+    url = "https://randomuser.me/api/?results=1";
+    fetchInformation(url);
+$('#add_user').on('click', function() {
+            fetchInformation(url);
+            $(this).remove();
+          });
+    function fetchInformation(url){
+        fetch(url)
+        .then((response) => response.json())
+        .then(function(data){
+           data.results.forEach(user => {
+               data = `<tr>
+               <td>${user.name.title}  ${user.name.first} ${user.name.last}</td>
+               <td>${user.dob.age} </td>
+               <td>${user.gender} </td>
+               <td>${user.location.street.number},${user.location.street.name},${user.location.city},${user.location.state},${user.location.country},${user.location.postcode} ,${user.location.coordinates.latitude},${user.location.coordinates.longitude}</td>
+               <td>${user.email} </td>
+               <td><img src="${user.picture.medium}" class="img-rounded" alt="Cinque Terre"></td>
+               // <span>(${user.nat})</span>
+               // <span style="margin-left:350px;">Email: ${user.email}</span>
+               </tr>`;
+               console.log(data);
+               $("#user_table").append(data); 
+           }); 
+          btnadd = '<button id="add_user" class="btn btn-primary">Add User</button>';
+          $("#result").append(btnadd);
+          $('#add_user').on('click', function() {
+            fetchInformation(url);
+            $(this).remove();
+          });   
+        })
+    }
+});
+</script>
